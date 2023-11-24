@@ -1,0 +1,92 @@
+PUTC    MACRO       ;al yazmacindaki degeri ekranda gosterir, dl ve ah etkilenir.
+        PUSH AX
+		PUSH DX
+		MOV DL, AL
+		MOV AH, 2
+		INT 21H
+		POP DX
+		POP AX
+        ENDM
+
+PUT_STR MACRO                ;ax'de adresi verilen string'i 0 gorene kadar ekrana bastirir.
+        LOCAL PUT_L, FIN
+        PUSH BX
+        MOV BX, AX
+PUT_L:  MOV AL, BYTE PTR[BX]
+        CMP AL, 0
+        JE FIN
+        PUTC
+        INC BX
+        JMP PUT_L
+FIN:    POP BX
+        ENDM
+
+GETC   MACRO       ; klavyeden girilen karkteri al'ye alir
+       MOV AH, 1H
+       INT 21H
+       ENDM
+
+GETN   MACRO                 ; klavyeden girilen sayiyi ax'de saklar.
+       LOCAL GN_ST, NEW, FR
+       PUSH BX
+	   PUSH CX
+	   PUSH DX
+GN_ST: XOR DX, DX
+       XOR BX, BX
+       XOR CX, CX
+NEW:   GETC
+       CMP AL, CR
+       JE FR
+       SUB AL, '0'
+       MOV BL, AL
+       MOV AX, 10
+	   MUL CX
+	   MOV CX, AX
+	   ADD CX, BX
+	   JMP NEW
+FR:    MOV AX, CX
+       POP DX
+       POP CX	   
+	   POP BX
+       ENDM
+
+PUTN    MACRO medyan            ; parametre olarak verilen sayiyi ax'e alir ve onluk tabanda yazdirir.
+        LOCAL calc, DISP, LEND
+        PUSH CX
+        PUSH DX
+        XOR DX, DX
+		PUSH DX
+        MOV AX, medyan
+        MOV CX, 10
+calc:   DIV CX	
+        ADD DX, '0'
+        PUSH DX
+        XOR DX, DX
+        CMP AX, 0
+        JNE calc
+DISP:   POP AX
+        CMP AX, 0
+        JE LEND
+        PUTC
+        JMP DISP
+LEND:   POP DX
+        POP CX
+        ENDM
+
+GIRIS_DIZI MACRO sizemsg, numbermsg, n, SAYILAR  ; kullanicidan boyutu ve dizi bilgisini alir.
+        LOCAL NSIZE, NEWINT
+NSIZE:	LEA AX, sizemsg
+		PUT_STR
+		GETN
+		CMP AX, 10d
+		JA NSIZE
+		MOV n, AX
+		MOV CX, AX
+		XOR SI, SI
+NEWINT: LEA AX, numbermsg
+		PUT_STR
+		GETN
+		MOV SAYILAR[SI], AX
+		ADD SI, 2
+		LOOP NEWINT
+        ENDM		
