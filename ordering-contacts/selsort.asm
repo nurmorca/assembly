@@ -4,10 +4,6 @@
 .data
 .code
 
-;; kodlari satir satir aciklamak icin zamanim olmadi maalesef.
-;; bunun yerine belli bir kisim noktalara o kod parcasinin ne yaptigini aciklamaya calistim
-;; yani direkt olarak o komutun aciklamasi degiller.
-
 
 selsortasm PROC NEAR  ;; gerekli stack atma islemlerinin yapilmasi.
            PUSH EBP
