@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
+// an application which orders a contact list alphabetically based on names, surnames or numbers 
+// the info is getting read from a txt file.
+
+// to compile and run the application use visual studio.
+
 // assembly tarafinda anlasilmayan noktalar icin isterseniz iletisime gecebilirsiniz (nur.morca@std.yildiz.edu.tr)
 // RELEASE modda calismasi:
 // fscanf sscanf hatasi icin 
